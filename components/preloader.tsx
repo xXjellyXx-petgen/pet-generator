@@ -9,17 +9,28 @@ interface PreloaderProps {
   duration?: number
 }
 
-export default function Preloader({
-  onComplete,
-  videoSrc = "/videos/preloader.mp4",
-  fallbackVideoSrc = "/videos/preloader.webm",
-  duration = 3000,
-}: PreloaderProps) {
+export default function Preloader({ onComplete, videoSrc, fallbackVideoSrc, duration = 3000 }: PreloaderProps) {
   const [isLoading, setIsLoading] = useState(true)
   const [progress, setProgress] = useState(0)
+  const [hasVideo, setHasVideo] = useState(false)
   const videoRef = useRef<HTMLVideoElement>(null)
 
   useEffect(() => {
+    // Only check for video if videoSrc is provided
+    if (videoSrc) {
+      const checkVideo = async () => {
+        try {
+          const response = await fetch(videoSrc, { method: "HEAD" })
+          setHasVideo(response.ok)
+        } catch {
+          setHasVideo(false)
+        }
+      }
+      checkVideo()
+    } else {
+      setHasVideo(false)
+    }
+
     // Simulate loading progress
     const progressInterval = setInterval(() => {
       setProgress((prev) => {
@@ -41,7 +52,7 @@ export default function Preloader({
       clearInterval(progressInterval)
       clearTimeout(timer)
     }
-  }, [duration, onComplete])
+  }, [duration, onComplete, videoSrc])
 
   const handleVideoEnd = () => {
     setIsLoading(false)
@@ -49,8 +60,8 @@ export default function Preloader({
   }
 
   const handleVideoError = () => {
-    console.warn("Preloader video failed to load, using fallback")
-    // Continue with loading animation
+    console.warn("Preloader video failed to load, using fallback animation")
+    setHasVideo(false)
   }
 
   if (!isLoading) {
@@ -63,22 +74,23 @@ export default function Preloader({
 
   return (
     <div className="fixed inset-0 bg-gradient-to-br from-cyan-400 via-cyan-300 to-blue-400 flex flex-col items-center justify-center z-50">
-      {/* Video Background */}
-      <div className="absolute inset-0 flex items-center justify-center">
-        <video
-          ref={videoRef}
-          className="w-full h-full object-cover opacity-80"
-          autoPlay
-          muted
-          playsInline
-          onEnded={handleVideoEnd}
-          onError={handleVideoError}
-        >
-          <source src={videoSrc} type="video/mp4" />
-          <source src={fallbackVideoSrc} type="video/webm" />
-          {/* Fallback for browsers that don't support video */}
-        </video>
-      </div>
+      {/* Video Background - Only show if video exists */}
+      {hasVideo && videoSrc && (
+        <div className="absolute inset-0 flex items-center justify-center">
+          <video
+            ref={videoRef}
+            className="w-full h-full object-cover opacity-80"
+            autoPlay
+            muted
+            playsInline
+            onEnded={handleVideoEnd}
+            onError={handleVideoError}
+          >
+            <source src={videoSrc} type="video/mp4" />
+            {fallbackVideoSrc && <source src={fallbackVideoSrc} type="video/webm" />}
+          </video>
+        </div>
+      )}
 
       {/* Loading Content Overlay */}
       <div className="relative z-10 text-center text-white">
