@@ -10,7 +10,7 @@ interface PreloaderProps {
 
 export default function Preloader({
   onComplete,
-  videoSrc = "/videos/preloader.mp4",
+  videoSrc = "/videos/preloader3.mp4",
   fallbackVideoSrc
 }: PreloaderProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
