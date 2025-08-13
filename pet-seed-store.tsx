@@ -87,7 +87,7 @@ const pets: Pet[] = [
   },
   {
     id: "5",
-    name: "Red Dragon",
+    name: "Dragonfly",
     image: "/dragonfly.png",
     quantity: 0,
     claimed: false,
