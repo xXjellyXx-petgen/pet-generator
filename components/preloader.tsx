@@ -1,48 +1,48 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef } from "react";
 
-export default function Preloader({ videoSrc = "/videos/preloader3.mp4" }) {
-  const [showInstruction, setShowInstruction] = useState(false);
+interface PreloaderProps {
+  onComplete: () => void;
+  videoSrc?: string;
+  fallbackVideoSrc?: string;
+}
+
+export default function Preloader({
+  onComplete,
+  videoSrc = "/videos/preloader.mp4",
+  fallbackVideoSrc
+}: PreloaderProps) {
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
-    // Detect if inside an in-app browser (like Facebook/Instagram)
-    const ua = navigator.userAgent || navigator.vendor;
-    if (/FBAN|FBAV|Instagram|Line|Twitter/i.test(ua)) {
-      setShowInstruction(true);
-    }
-  }, []);
+    const video = videoRef.current;
+    if (!video) return;
+
+    // If video can't play, skip straight to onComplete
+    const handleError = () => onComplete();
+    video.addEventListener("error", handleError);
+
+    return () => {
+      video.removeEventListener("error", handleError);
+    };
+  }, [onComplete]);
 
   return (
-    <div style={{ position: "fixed", inset: 0, background: "black", zIndex: 9999 }}>
+    <div className="fixed inset-0 bg-black flex items-center justify-center z-50">
       <video
-        src={videoSrc}
+        ref={videoRef}
+        className="w-full h-full object-cover"
         autoPlay
         muted
         playsInline
-        style={{
-          width: "100%",
-          height: "100%",
-          objectFit: "cover",
-        }}
-      ></video>
-
-      {showInstruction && (
-        <div
-          style={{
-            position: "absolute",
-            bottom: "20px",
-            width: "100%",
-            textAlign: "center",
-            color: "white",
-            fontSize: "16px",
-            background: "rgba(0,0,0,0.5)",
-            padding: "10px",
-          }}
-        >
-          For more effectivity, tap the 3 dots ••• and open in your browser
-        </div>
-      )}
+        onEnded={onComplete}
+      >
+        <source src={videoSrc} type="video/mp4" />
+        {fallbackVideoSrc && (
+          <source src={fallbackVideoSrc} type="video/webm" />
+        )}
+      </video>
     </div>
   );
 }
