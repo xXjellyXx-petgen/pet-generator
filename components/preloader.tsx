@@ -13,7 +13,7 @@ export default function Preloader({
   onComplete,
   videoSrc = "/videos/preloader.mp4",
   fallbackVideoSrc,
-  duration = 3000
+  duration = 5000
 }: PreloaderProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [progress, setProgress] = useState(0);
@@ -21,7 +21,6 @@ export default function Preloader({
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
-    // Check if the video exists
     if (videoSrc) {
       const checkVideo = async () => {
         try {
@@ -36,7 +35,6 @@ export default function Preloader({
       setHasVideo(false);
     }
 
-    // Simulate loading progress
     const progressInterval = setInterval(() => {
       setProgress((prev) => {
         if (prev >= 100) {
@@ -47,7 +45,6 @@ export default function Preloader({
       });
     }, 100);
 
-    // Auto complete after duration
     const timer = setTimeout(() => {
       setIsLoading(false);
       setTimeout(onComplete, 500);
@@ -101,18 +98,8 @@ export default function Preloader({
         </div>
       )}
 
-      {/* Loading Overlay */}
+      {/* Progress Bar */}
       <div className="relative z-10 text-center text-white">
-        <div className="mb-8">
-          <h1 className="text-4xl md:text-6xl font-bold mb-2 animate-pulse">
-            Pet & Seed Store
-          </h1>
-          <p className="text-lg md:text-xl opacity-90">
-            Loading your adventure...
-          </p>
-        </div>
-
-        {/* Progress Bar */}
         <div className="w-80 max-w-sm mx-auto">
           <div className="bg-white/20 rounded-full h-2 mb-4 overflow-hidden">
             <div
