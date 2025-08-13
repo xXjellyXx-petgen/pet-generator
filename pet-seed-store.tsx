@@ -109,7 +109,7 @@ const pets: Pet[] = [
   {
     id: "8",
     name: "Queen Bee",
-    image: "/db.png",
+    image: "/qb.png",
     quantity: 0,
     claimed: false,
   },
