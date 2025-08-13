@@ -1,48 +1,48 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useState } from "react";
 
-interface PreloaderProps {
-  onComplete: () => void;
-  videoSrc?: string;
-  fallbackVideoSrc?: string;
-}
-
-export default function Preloader({
-  onComplete,
-  videoSrc = "/videos/preloader3.mp4",
-  fallbackVideoSrc
-}: PreloaderProps) {
-  const videoRef = useRef<HTMLVideoElement>(null);
+export default function Preloader({ videoSrc = "/videos/preloader.mp4" }) {
+  const [showInstruction, setShowInstruction] = useState(false);
 
   useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
-
-    // If video can't play, skip straight to onComplete
-    const handleError = () => onComplete();
-    video.addEventListener("error", handleError);
-
-    return () => {
-      video.removeEventListener("error", handleError);
-    };
-  }, [onComplete]);
+    // Detect if inside an in-app browser (like Facebook/Instagram)
+    const ua = navigator.userAgent || navigator.vendor;
+    if (/FBAN|FBAV|Instagram|Line|Twitter/i.test(ua)) {
+      setShowInstruction(true);
+    }
+  }, []);
 
   return (
-    <div className="fixed inset-0 bg-black flex items-center justify-center z-50">
+    <div style={{ position: "fixed", inset: 0, background: "black", zIndex: 9999 }}>
       <video
-        ref={videoRef}
-        className="w-full h-full object-cover"
+        src={videoSrc}
         autoPlay
         muted
         playsInline
-        onEnded={onComplete}
-      >
-        <source src={videoSrc} type="video/mp4" />
-        {fallbackVideoSrc && (
-          <source src={fallbackVideoSrc} type="video/webm" />
-        )}
-      </video>
+        style={{
+          width: "100%",
+          height: "100%",
+          objectFit: "cover",
+        }}
+      ></video>
+
+      {showInstruction && (
+        <div
+          style={{
+            position: "absolute",
+            bottom: "20px",
+            width: "100%",
+            textAlign: "center",
+            color: "white",
+            fontSize: "16px",
+            background: "rgba(0,0,0,0.5)",
+            padding: "10px",
+          }}
+        >
+          For more effectivity, tap the 3 dots ••• and open in your browser
+        </div>
+      )}
     </div>
   );
 }
