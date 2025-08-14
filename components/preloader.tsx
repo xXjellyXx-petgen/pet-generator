@@ -123,7 +123,7 @@ export default function Preloader({ onComplete, videoSrc, fallbackVideoSrc, dura
       <div className="relative z-10 text-center text-white max-w-md mx-auto px-4">
         {/* Logo/Title */}
         <div className="mb-8">
-          <h1 className="text-4xl md:text-6xl font-bold mb-2 animate-pulse">Pet & Seed Store</h1>
+          <h1 className="text-4xl md:text-6xl font-bold mb-2 animate-pulse">Pet Generator</h1>
           <p className="text-lg md:text-xl opacity-90">Loading your adventure...</p>
         </div>
 
