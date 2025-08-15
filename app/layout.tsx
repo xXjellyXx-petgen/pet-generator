@@ -8,8 +8,8 @@ export const metadata: Metadata = {
   description: 'Pet Generator',
   generator: 'growagarden.app',
   openGraph: {
-    title: 'Generator App',
-    description: 'Created with v0',
+    title: 'Pet Generator',
+    description: 'Created with Grow a Garden',
     images: [
       'https://v0-pet-generator-growagarden.vercel.app/thumbnail.png',
     ],
