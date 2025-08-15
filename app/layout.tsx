@@ -4,9 +4,24 @@ import { GeistMono } from 'geist/font/mono'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'v0 App',
-  description: 'Created with v0',
-  generator: 'v0.app',
+  title: 'Pet Generator',
+  description: 'Pet Generator',
+  generator: 'growagarden.app',
+  openGraph: {
+    title: 'Generator App',
+    description: 'Created with v0',
+    images: [
+      'https://v0-pet-generator-growagarden.vercel.app/thumbnail.png',
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Generator App',
+    description: 'Created with v0',
+    images: [
+      'https://v0-pet-generator-growagarden.vercel.app/thumbnail.png',
+    ],
+  },
 }
 
 export default function RootLayout({
