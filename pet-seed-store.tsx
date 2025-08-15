@@ -59,56 +59,56 @@ const pets: Pet[] = [
   {
     id: "1",
     name: "T-Rex",
-    image: "/tr.png",
+    image: "/placeholder.svg?height=80&width=80&text=T-Rex",
     quantity: 0,
     claimed: false,
   },
   {
     id: "2",
     name: "Raccoon",
-    image: "/rc.png",
+    image: "/placeholder.svg?height=80&width=80&text=Raccoon",
     quantity: 0,
     claimed: false,
   },
   {
     id: "3",
     name: "Fennec Fox",
-    image: "/f.png",
+    image: "/placeholder.svg?height=80&width=80&text=Fox",
     quantity: 0,
     claimed: false,
   },
   {
     id: "4",
     name: "Kitsune",
-    image: "/k.png",
+    image: "/placeholder.svg?height=80&width=80&text=Kitsune",
     quantity: 0,
     claimed: false,
   },
   {
     id: "5",
-    name: "Dragonfly",
-    image: "/dragonfly.png",
+    name: "Red Dragon",
+    image: "/placeholder.svg?height=80&width=80&text=Dragon",
     quantity: 0,
     claimed: false,
   },
   {
     id: "6",
     name: "Mimic Octopus",
-    image: "/octo.png",
+    image: "/placeholder.svg?height=80&width=80&text=Octopus",
     quantity: 0,
     claimed: false,
   },
   {
     id: "7",
     name: "Disco Bee",
-    image: "/db.png",
+    image: "/placeholder.svg?height=80&width=80&text=Bee",
     quantity: 0,
     claimed: false,
   },
   {
     id: "8",
     name: "Queen Bee",
-    image: "/qb.png",
+    image: "/placeholder.svg?height=80&width=80&text=Queen",
     quantity: 0,
     claimed: false,
   },
@@ -460,6 +460,7 @@ export default function PetSeedStore() {
 
   // Show preloader only for TikTok users
   if (showPreloader) {
+    console.log("🎬 SHOWING PRELOADER - Video path: https://hebbkx1anhila5yf.public.blob.vercel-storage.com/preloader2-mI6piKsE6ojJAcZTQ7BmXp620otg8L.mp4")
     return <Preloader onComplete={handlePreloaderComplete} videoSrc="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/preloader2-mI6piKsE6ojJAcZTQ7BmXp620otg8L.mp4" duration={4000} />
   }
 

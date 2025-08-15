@@ -19,24 +19,48 @@ export default function Preloader({ onComplete, videoSrc, fallbackVideoSrc, dura
   useEffect(() => {
     console.log("🎬 Preloader started with duration:", duration)
 
-    // Enhanced browser detection
+    // Enhanced browser detection with more TikTok signatures
     const userAgent = typeof window !== "undefined" ? window.navigator.userAgent.toLowerCase() : ""
-    const isTikTok = userAgent.includes("tiktok") || userAgent.includes("musically") || userAgent.includes("bytedance")
+    const isTikTok =
+      userAgent.includes("tiktok") ||
+      userAgent.includes("musically") ||
+      userAgent.includes("bytedance") ||
+      userAgent.includes("tiktok_web") ||
+      userAgent.includes("musical.ly") ||
+      userAgent.includes("aweme") ||
+      userAgent.includes("trill") ||
+      window.location.href.includes("tiktok")
 
     setDebugInfo(`
       UserAgent: ${userAgent}
       Is TikTok: ${isTikTok}
       Video Source: ${videoSrc || "Not provided"}
       Window: ${typeof window !== "undefined"}
+      Location: ${typeof window !== "undefined" ? window.location.href : "N/A"}
     `)
 
-    // Check for video if provided
+    // Always check for video when debugging
     if (videoSrc) {
       const checkVideo = async () => {
         try {
           console.log("🎬 Checking for video:", videoSrc)
 
-          // Try multiple methods to check video
+          // Try to create video element to test
+          const testVideo = document.createElement("video")
+          testVideo.src = videoSrc
+
+          testVideo.onloadeddata = () => {
+            console.log("✅ Video loaded successfully via element test")
+            setHasVideo(true)
+          }
+
+          testVideo.onerror = (e) => {
+            console.log("❌ Video element test failed:", e)
+            setVideoError("Video element failed")
+            setHasVideo(false)
+          }
+
+          // Also try fetch
           const response = await fetch(videoSrc, { method: "HEAD" })
           console.log("🎬 Video HEAD response:", response.status, response.ok)
 
@@ -44,17 +68,8 @@ export default function Preloader({ onComplete, videoSrc, fallbackVideoSrc, dura
             setHasVideo(true)
             console.log("✅ Video found via HEAD request")
           } else {
-            console.log("❌ Video HEAD request failed, trying GET...")
-
-            // Fallback: try GET request
-            const getResponse = await fetch(videoSrc)
-            if (getResponse.ok) {
-              setHasVideo(true)
-              console.log("✅ Video found via GET request")
-            } else {
-              setVideoError(`HTTP ${getResponse.status}`)
-              setHasVideo(false)
-            }
+            setVideoError(`HTTP ${response.status}`)
+            setHasVideo(false)
           }
         } catch (error) {
           console.log("🎬 Video check failed:", error)
@@ -64,7 +79,7 @@ export default function Preloader({ onComplete, videoSrc, fallbackVideoSrc, dura
       }
       checkVideo()
     } else {
-      console.log("🎬 No videoSrc provided, using animated loading")
+      console.log("🎬 No videoSrc provided")
       setHasVideo(false)
     }
 
@@ -107,19 +122,11 @@ export default function Preloader({ onComplete, videoSrc, fallbackVideoSrc, dura
     console.log("🎬 Video load started")
   }
 
-  if (!isLoading) {
-    return (
-      <div className="fixed inset-0 bg-black flex items-center justify-center z-50 animate-out fade-out duration-500">
-        <div className="text-white text-2xl font-bold animate-pulse">Loading Complete!</div>
-      </div>
-    )
-  }
-
   return (
     <div className="fixed inset-0 bg-black flex flex-col items-center justify-center z-50">
       {/* Video Background - ONLY VIDEO, NO OVERLAY */}
       {hasVideo && videoSrc ? (
-        <div className="absolute inset-0 flex items-center justify-center">
+        <div className="absolute inset-0 flex items-center justify-center bg-black">
           <video
             ref={videoRef}
             className="w-full h-full object-cover"
@@ -127,6 +134,7 @@ export default function Preloader({ onComplete, videoSrc, fallbackVideoSrc, dura
             muted
             playsInline
             preload="auto"
+            controls={false}
             onEnded={handleVideoEnd}
             onError={handleVideoError}
             onCanPlay={handleVideoCanPlay}
@@ -152,29 +160,30 @@ export default function Preloader({ onComplete, videoSrc, fallbackVideoSrc, dura
 
       {/* Debug Info - Only in development */}
       {process.env.NODE_ENV === "development" && (
-        <div className="absolute bottom-4 left-4 text-xs opacity-80 bg-black/50 rounded p-3 text-white max-w-xs">
-          <div className="font-bold mb-2">🔍 Debug Info:</div>
+        <div className="absolute top-4 left-4 text-xs bg-black/80 rounded p-3 text-white max-w-xs z-50">
+          <div className="font-bold mb-2 text-green-400">🔍 DEBUG INFO:</div>
           <pre className="whitespace-pre-wrap text-xs">{debugInfo}</pre>
-          <div>Has Video: {hasVideo ? "✅ Yes" : "❌ No"}</div>
-          <div>Video Error: {videoError || "None"}</div>
-          <div>Status: {hasVideo ? "Playing video" : "Showing fallback"}</div>
-          <div>Video Element: {videoRef.current ? "✅ Created" : "❌ Missing"}</div>
+          <div className="mt-2 space-y-1">
+            <div>Has Video: {hasVideo ? "✅ Yes" : "❌ No"}</div>
+            <div>Video Error: {videoError || "None"}</div>
+            <div>Status: {hasVideo ? "Playing video" : "Showing fallback"}</div>
+            <div>Video Element: {videoRef.current ? "✅ Created" : "❌ Missing"}</div>
+            <div className="text-yellow-400">Video Path: {videoSrc}</div>
+          </div>
         </div>
       )}
 
-      {/* Skip Button - Only visible in development or if video fails */}
-      {(process.env.NODE_ENV === "development" || !hasVideo) && (
-        <button
-          onClick={() => {
-            console.log("🎬 Skip button clicked")
-            setIsLoading(false)
-            onComplete()
-          }}
-          className="absolute bottom-8 right-8 bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-lg transition-colors duration-200 text-sm"
-        >
-          Skip
-        </button>
-      )}
+      {/* Always show skip button for testing */}
+      <button
+        onClick={() => {
+          console.log("🎬 Skip button clicked")
+          setIsLoading(false)
+          onComplete()
+        }}
+        className="absolute bottom-8 right-8 bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-lg transition-colors duration-200 text-sm z-50"
+      >
+        Skip
+      </button>
     </div>
   )
 }
