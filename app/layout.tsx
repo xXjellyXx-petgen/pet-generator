@@ -4,24 +4,9 @@ import { GeistMono } from 'geist/font/mono'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'Pet Generator Grow a Garden',
-  description: 'Pet Generator',
-  generator: 'growagarden.app',
-  openGraph: {
-    title: 'Generator App',
-    description: 'Created with v0',
-    images: [
-      'https://v0-pet-generator-growagarden.vercel.app/thumbnail.png',
-    ],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Generator App',
-    description: 'Created with v0',
-    images: [
-      'https://v0-pet-generator-growagarden.vercel.app/thumbnail.png',
-    ],
-  },
+  title: 'v0 App',
+  description: 'Created with v0',
+  generator: 'v0.app',
 }
 
 export default function RootLayout({

