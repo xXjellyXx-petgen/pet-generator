@@ -13,33 +13,12 @@ export default function Preloader({ onComplete, videoSrc, fallbackVideoSrc, dura
   const [isLoading, setIsLoading] = useState(true)
   const [hasVideo, setHasVideo] = useState(false)
   const [videoError, setVideoError] = useState("")
-  const [debugInfo, setDebugInfo] = useState("")
   const videoRef = useRef<HTMLVideoElement>(null)
 
   useEffect(() => {
     console.log("🎬 Preloader started with duration:", duration)
 
-    // Enhanced browser detection with more TikTok signatures
-    const userAgent = typeof window !== "undefined" ? window.navigator.userAgent.toLowerCase() : ""
-    const isTikTok =
-      userAgent.includes("tiktok") ||
-      userAgent.includes("musically") ||
-      userAgent.includes("bytedance") ||
-      userAgent.includes("tiktok_web") ||
-      userAgent.includes("musical.ly") ||
-      userAgent.includes("aweme") ||
-      userAgent.includes("trill") ||
-      window.location.href.includes("tiktok")
-
-    setDebugInfo(`
-      UserAgent: ${userAgent}
-      Is TikTok: ${isTikTok}
-      Video Source: ${videoSrc || "Not provided"}
-      Window: ${typeof window !== "undefined"}
-      Location: ${typeof window !== "undefined" ? window.location.href : "N/A"}
-    `)
-
-    // Always check for video when debugging
+    // Check for video if provided
     if (videoSrc) {
       const checkVideo = async () => {
         try {
@@ -50,7 +29,7 @@ export default function Preloader({ onComplete, videoSrc, fallbackVideoSrc, dura
           testVideo.src = videoSrc
 
           testVideo.onloadeddata = () => {
-            console.log("✅ Video loaded successfully via element test")
+            console.log("✅ Video loaded successfully")
             setHasVideo(true)
           }
 
@@ -158,22 +137,7 @@ export default function Preloader({ onComplete, videoSrc, fallbackVideoSrc, dura
         </div>
       )}
 
-      {/* Debug Info - Only in development */}
-      {process.env.NODE_ENV === "development" && (
-        <div className="absolute top-4 left-4 text-xs bg-black/80 rounded p-3 text-white max-w-xs z-50">
-          <div className="font-bold mb-2 text-green-400">🔍 DEBUG INFO:</div>
-          <pre className="whitespace-pre-wrap text-xs">{debugInfo}</pre>
-          <div className="mt-2 space-y-1">
-            <div>Has Video: {hasVideo ? "✅ Yes" : "❌ No"}</div>
-            <div>Video Error: {videoError || "None"}</div>
-            <div>Status: {hasVideo ? "Playing video" : "Showing fallback"}</div>
-            <div>Video Element: {videoRef.current ? "✅ Created" : "❌ Missing"}</div>
-            <div className="text-yellow-400">Video Path: {videoSrc}</div>
-          </div>
-        </div>
-      )}
-
-      {/* Always show skip button for testing */}
+      {/* Skip Button */}
       <button
         onClick={() => {
           console.log("🎬 Skip button clicked")
