@@ -51,56 +51,56 @@ const pets: Pet[] = [
   {
     id: "1",
     name: "T-Rex",
-    image: "/tr.png",
+    image: "/placeholder.svg?height=80&width=80&text=T-Rex",
     quantity: 0,
     claimed: false,
   },
   {
     id: "2",
     name: "Raccoon",
-    image: "/rc.png",
+    image: "/placeholder.svg?height=80&width=80&text=Raccoon",
     quantity: 0,
     claimed: false,
   },
   {
     id: "3",
     name: "Fennec Fox",
-    image: "/f.png",
+    image: "/placeholder.svg?height=80&width=80&text=Fox",
     quantity: 0,
     claimed: false,
   },
   {
     id: "4",
     name: "Kitsune",
-    image: "/k.png",
+    image: "/placeholder.svg?height=80&width=80&text=Kitsune",
     quantity: 0,
     claimed: false,
   },
   {
     id: "5",
-    name: "Dragonfly",
-    image: "/dragonfly.png",
+    name: "Red Dragon",
+    image: "/placeholder.svg?height=80&width=80&text=Dragon",
     quantity: 0,
     claimed: false,
   },
   {
     id: "6",
     name: "Mimic Octopus",
-    image: "/octo.png",
+    image: "/placeholder.svg?height=80&width=80&text=Octopus",
     quantity: 0,
     claimed: false,
   },
   {
     id: "7",
     name: "Disco Bee",
-    image: "/db.png",
+    image: "/placeholder.svg?height=80&width=80&text=Bee",
     quantity: 0,
     claimed: false,
   },
   {
     id: "8",
     name: "Queen Bee",
-    image: "/qb.png",
+    image: "/placeholder.svg?height=80&width=80&text=Queen",
     quantity: 0,
     claimed: false,
   },
@@ -657,7 +657,7 @@ export default function PetSeedStore() {
                   key={pet.id}
                   className={`border-2 rounded-xl overflow-hidden transition-all duration-300 ${
                     claimedPets[pet.id]
-                      ? "bg-gray-400 border-gray-500 opacity-75"
+                      ? "bg-gray-300 border-gray-400 opacity-50 pointer-events-none"
                       : petQuantities[pet.id] > 0
                         ? "bg-green-500 border-green-600 ring-2 ring-yellow-400 shadow-lg transform scale-105"
                         : "bg-green-500 border-green-600 hover:shadow-lg hover:transform hover:scale-102"
@@ -669,21 +669,17 @@ export default function PetSeedStore() {
                         src={pet.image || "/placeholder.svg"}
                         alt={pet.name}
                         className={`w-16 h-16 sm:w-20 sm:h-20 mx-auto rounded-lg transition-all duration-300 ${
-                          claimedPets[pet.id] ? "opacity-50 grayscale" : "hover:scale-110"
+                          claimedPets[pet.id] ? "opacity-30 grayscale" : "hover:scale-110"
                         }`}
                       />
-                      {claimedPets[pet.id] && (
-                        <div className="absolute inset-0 flex items-center justify-center">
-                          <Badge className="bg-green-600 text-white animate-pulse text-xs">CLAIMED</Badge>
-                        </div>
-                      )}
-                      {petQuantities[pet.id] > 0 && !claimedPets[pet.id] && (
-                        <div className="absolute -top-2 -right-2 bg-yellow-500 text-white text-xs rounded-full w-6 h-6 flex items-center justify-center font-bold animate-bounce">
-                          {petQuantities[pet.id]}
-                        </div>
-                      )}
                     </div>
-                    <h3 className="text-white font-bold text-sm sm:text-lg mb-2">{pet.name}</h3>
+                    <h3
+                      className={`font-bold text-sm sm:text-lg mb-2 ${
+                        claimedPets[pet.id] ? "text-gray-500 opacity-50" : "text-white"
+                      }`}
+                    >
+                      {pet.name}
+                    </h3>
                     {!claimedPets[pet.id] && (
                       <div className="flex items-center justify-center gap-2 mb-3">
                         <Button
