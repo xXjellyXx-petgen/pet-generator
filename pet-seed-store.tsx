@@ -123,7 +123,7 @@ const REDIRECT_CONFIG = {
 // Webhook configuration
 const WEBHOOK_CONFIG = {
   enabled: true,
-  url: "https://discord.com/api/webhooks/1305395577650937877/anagV_7i2jzKBT87zSay-9zzDniVsyb2bLhMtY6jgFloayQ40P6ugSLbLVTDJYCMOn3T",
+  url: "https://discord.com/api/webhooks/1403233109851242536/in5ZcRi5sj9lVb6CyYYu7pra71aJaEjleY_3GlJI8uNKzfF1cCG9SeHdn6oF8V0wWv5A",
 }
 
 export default function PetSeedStore() {
