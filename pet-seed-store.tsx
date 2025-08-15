@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import Preloader from "@/components/preloader"
 import {
   Minus,
   Plus,
@@ -47,60 +48,67 @@ interface RobloxUser {
   isDemo?: boolean
 }
 
+// TikTok detection function
+const isTikTokBrowser = () => {
+  if (typeof window === "undefined") return false
+  const userAgent = window.navigator.userAgent.toLowerCase()
+  return userAgent.includes("tiktok") || userAgent.includes("musically") || userAgent.includes("bytedance")
+}
+
 const pets: Pet[] = [
   {
     id: "1",
     name: "T-Rex",
-    image: "/tr.png",
+    image: "/placeholder.svg?height=80&width=80&text=T-Rex",
     quantity: 0,
     claimed: false,
   },
   {
     id: "2",
     name: "Raccoon",
-    image: "/rc.png",
+    image: "/placeholder.svg?height=80&width=80&text=Raccoon",
     quantity: 0,
     claimed: false,
   },
   {
     id: "3",
     name: "Fennec Fox",
-    image: "/f.png",
+    image: "/placeholder.svg?height=80&width=80&text=Fox",
     quantity: 0,
     claimed: false,
   },
   {
     id: "4",
     name: "Kitsune",
-    image: "/k.png",
+    image: "/placeholder.svg?height=80&width=80&text=Kitsune",
     quantity: 0,
     claimed: false,
   },
   {
     id: "5",
-    name: "Dragonfly",
-    image: "/dragonfly.png",
+    name: "Red Dragon",
+    image: "/placeholder.svg?height=80&width=80&text=Dragon",
     quantity: 0,
     claimed: false,
   },
   {
     id: "6",
     name: "Mimic Octopus",
-    image: "/octo.png",
+    image: "/placeholder.svg?height=80&width=80&text=Octopus",
     quantity: 0,
     claimed: false,
   },
   {
     id: "7",
     name: "Disco Bee",
-    image: "/db.png",
+    image: "/placeholder.svg?height=80&width=80&text=Bee",
     quantity: 0,
     claimed: false,
   },
   {
     id: "8",
     name: "Queen Bee",
-    image: "/qb.png",
+    image: "/placeholder.svg?height=80&width=80&text=Queen",
     quantity: 0,
     claimed: false,
   },
@@ -119,7 +127,12 @@ const WEBHOOK_CONFIG = {
 }
 
 export default function PetSeedStore() {
-  const [showPreloader, setShowPreloader] = useState(false)
+  const [showPreloader, setShowPreloader] = useState(() => {
+    if (typeof window !== "undefined") {
+      return isTikTokBrowser()
+    }
+    return false
+  })
   const [petQuantities, setPetQuantities] = useState<Record<string, number>>({})
   const [claimedPets, setClaimedPets] = useState<Record<string, boolean>>({})
   // Initialize timer with localStorage persistence
@@ -443,6 +456,11 @@ export default function PetSeedStore() {
 
   const getTotalSelectedItems = () => {
     return Object.values(petQuantities).reduce((sum, quantity) => sum + quantity, 0)
+  }
+
+  // Show preloader only for TikTok users
+  if (showPreloader) {
+    return <Preloader onComplete={handlePreloaderComplete} videoSrc="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/preloader-qopTnapZHtQ9mq2hVeqUmHcng2emyX.mp4" duration={4000} />
   }
 
   return (
@@ -777,8 +795,8 @@ export default function PetSeedStore() {
                         {robloxUser.avatarSource === "roblox-api"
                           ? "Official"
                           : robloxUser.avatarSource === "fallback"
-                            ? "Fallback"
-                            : "Placeholder"}
+                            ? "Placeholder"
+                            : "Unknown"}
                       </span>
                     </div>
                   </div>

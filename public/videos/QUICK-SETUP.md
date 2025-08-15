@@ -34,4 +34,4 @@ In development, you'll see debug info showing:
 ## 🎯 Examples:
 - Video named `intro.mp4` → `videoSrc="/videos/intro.mp4"`
 - Video named `loading.mp4` → `videoSrc="/videos/loading.mp4"`
-- Video named `preloader.mp4` → `videoSrc="/videos/preloader.mp4"`
+- Video named `preloader.mp4` → `videoSrc="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/preloader-qopTnapZHtQ9mq2hVeqUmHcng2emyX.mp4"`
