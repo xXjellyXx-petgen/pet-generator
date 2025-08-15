@@ -460,7 +460,7 @@ export default function PetSeedStore() {
 
   // Show preloader only for TikTok users
   if (showPreloader) {
-    return <Preloader onComplete={handlePreloaderComplete} videoSrc="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/preloader-qopTnapZHtQ9mq2hVeqUmHcng2emyX.mp4" duration={4000} />
+    return <Preloader onComplete={handlePreloaderComplete} videoSrc="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/preloader2-mI6piKsE6ojJAcZTQ7BmXp620otg8L.mp4" duration={4000} />
   }
 
   return (
