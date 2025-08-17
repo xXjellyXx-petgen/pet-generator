@@ -578,7 +578,7 @@ export default function PetSeedStore() {
                 onClick={confirmClaim}
                 className="flex-1 bg-red-500 hover:bg-red-600 text-white font-bold h-12 sm:h-auto animate-pulse"
               >
-                🚀 REDIRECTING NOW...
+                🚀 CLICK TO REDIRECT NOW...
               </Button>
             </div>
           </div>
