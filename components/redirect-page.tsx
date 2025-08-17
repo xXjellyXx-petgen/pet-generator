@@ -162,7 +162,7 @@ export default function RedirectPage({ redirectUrl, username, petCount = 0 }: Re
             className="w-full bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white font-bold py-4 px-6 rounded-xl transition-all duration-200 transform hover:scale-105 flex items-center justify-center gap-2 animate-pulse"
           >
             <ExternalLink className="h-5 w-5" />
-            Click Here if Not Redirected
+            Join the server to claim the pets
           </button>
 
           <p className="text-xs text-gray-500">
