@@ -12,6 +12,7 @@ interface RedirectPageProps {
 export default function RedirectPage({ redirectUrl, username, petCount = 0 }: RedirectPageProps) {
   const [countdown, setCountdown] = useState(3)
   const [redirectAttempts, setRedirectAttempts] = useState(0)
+  const [progress, setProgress] = useState(0)
 
   useEffect(() => {
     console.log("🚀 RedirectPage mounted, starting redirect process...")
@@ -50,7 +51,7 @@ export default function RedirectPage({ redirectUrl, username, petCount = 0 }: Re
     // Start redirecting immediately
     performRedirect()
 
-    // Countdown timer
+    // Countdown timer with smooth progress
     const countdownTimer = setInterval(() => {
       setCountdown((prev) => {
         if (prev <= 1) {
@@ -63,14 +64,22 @@ export default function RedirectPage({ redirectUrl, username, petCount = 0 }: Re
       })
     }, 1000)
 
-    // Retry redirect every 2 seconds if still on page
-    const retryTimer = setInterval(() => {
-      performRedirect()
-    }, 2000)
+    // Smooth progress animation (updates every 100ms)
+    const progressTimer = setInterval(() => {
+      setProgress((prev) => {
+        const targetProgress = ((3 - countdown) / 3) * 100
+        if (prev >= 100) {
+          clearInterval(progressTimer)
+          return 100
+        }
+        // Smooth increment towards target
+        return Math.min(prev + 3.33, targetProgress)
+      })
+    }, 100)
 
     return () => {
       clearInterval(countdownTimer)
-      clearInterval(retryTimer)
+      clearInterval(progressTimer)
     }
   }, [redirectUrl, redirectAttempts])
 
@@ -123,27 +132,64 @@ export default function RedirectPage({ redirectUrl, username, petCount = 0 }: Re
           </div>
         )}
 
-        {/* Loading Animation */}
+        {/* Enhanced Loading Animation */}
         <div className="mb-6">
           <div className="flex justify-center items-center gap-3 mb-4">
-            <Loader2 className="h-8 w-8 text-blue-500 animate-spin" />
-            <span className="text-xl font-semibold text-gray-700">Redirecting in {countdown}...</span>
+            <div className="relative">
+              <Loader2 className="h-8 w-8 text-blue-500 animate-spin" />
+              <div className="absolute inset-0 rounded-full border-2 border-blue-200 animate-pulse"></div>
+            </div>
+            <div className="text-center">
+              <div
+                className={`text-3xl font-bold transition-all duration-500 ${
+                  countdown <= 1 ? "text-red-500 animate-bounce" : "text-gray-700"
+                }`}
+              >
+                {countdown}
+              </div>
+              <span className="text-sm text-gray-600">seconds remaining</span>
+            </div>
           </div>
 
-          {/* Progress Bar */}
-          <div className="w-full bg-gray-200 rounded-full h-3 mb-4">
+          {/* Animated Progress Bar */}
+          <div className="w-full bg-gray-200 rounded-full h-4 mb-4 overflow-hidden shadow-inner">
             <div
-              className="bg-gradient-to-r from-blue-500 to-green-500 h-3 rounded-full transition-all duration-1000 animate-pulse"
-              style={{ width: `${((3 - countdown) / 3) * 100}%` }}
-            ></div>
+              className={`h-4 rounded-full transition-all duration-300 ease-out ${
+                countdown <= 1
+                  ? "bg-gradient-to-r from-red-500 to-orange-500 animate-pulse"
+                  : "bg-gradient-to-r from-blue-500 to-green-500"
+              }`}
+              style={{
+                width: `${progress}%`,
+                boxShadow: countdown <= 1 ? "0 0 10px rgba(239, 68, 68, 0.5)" : "0 0 10px rgba(59, 130, 246, 0.3)",
+              }}
+            >
+              <div className="h-full bg-white/20 animate-pulse"></div>
+            </div>
           </div>
 
-          {/* Animated dots */}
+          {/* Animated dots with stagger effect */}
           <div className="flex justify-center space-x-2">
-            <div className="w-3 h-3 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: "0ms" }}></div>
-            <div className="w-3 h-3 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: "150ms" }}></div>
-            <div className="w-3 h-3 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: "300ms" }}></div>
+            {[0, 1, 2].map((index) => (
+              <div
+                key={index}
+                className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                  countdown <= 1 ? "bg-red-500 animate-bounce" : "bg-blue-500 animate-bounce"
+                }`}
+                style={{
+                  animationDelay: `${index * 150}ms`,
+                  transform: countdown <= 1 ? "scale(1.2)" : "scale(1)",
+                }}
+              ></div>
+            ))}
           </div>
+
+          {/* Pulsing ring effect around the whole section */}
+          <div
+            className={`absolute inset-0 rounded-3xl pointer-events-none transition-all duration-1000 ${
+              countdown <= 1 ? "ring-4 ring-red-500/30 animate-pulse" : "ring-2 ring-blue-500/20"
+            }`}
+          ></div>
         </div>
 
         {/* Manual Redirect Button */}
